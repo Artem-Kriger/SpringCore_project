@@ -10,10 +10,8 @@ import project.exceptions.*;
 import project.model.Account;
 import project.model.User;
 
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class AccountService {
@@ -222,7 +220,12 @@ public class AccountService {
                 float currentMoney = accountClosing.getMoneyAmount();
 
                 int userId = accountClosing.getUserId();
-                Account firstAccount = userMap.get(userId).getAccountList().getFirst();
+
+                // Создаем список и сортируем по accountId
+                List<Account> accounts = userMap.get(userId).getAccountList();
+                accounts.sort(Comparator.comparing(Account::getAccountId));
+
+                Account firstAccount = accounts.getFirst();
                 float firstAccountMoney = firstAccount.getMoneyAmount();
 
                 firstAccount.setMoneyAmount(firstAccountMoney + currentMoney);
